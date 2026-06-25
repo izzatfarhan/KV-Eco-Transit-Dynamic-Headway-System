@@ -11,7 +11,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-OPEN_DATA_URL = "https://api.data.gov.my/gtfs-realtime/vehicle-positions"
+OPEN_DATA_URL = "https://api.data.gov.my/gtfs-realtime/vehicle-position/prasarana?category=rapid-rail-kl"
 
 async def fetch_live_telemetry(api_key: Optional[str] = None):
     """
