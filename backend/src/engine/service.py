@@ -2,8 +2,8 @@ import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from backend.src.stations.models import Station
-from backend.src.trains.models import Train
+from src.stations.models import Station
+from src.trains.models import Train
 
 logger = logging.getLogger(__name__)
 

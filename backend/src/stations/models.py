@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Numeric, DateTime
 from sqlalchemy.orm import relationship
 from geoalchemy2 import Geometry
 
-from backend.src.models import Base
+from src.models import Base
 
 class Station(Base):
     """

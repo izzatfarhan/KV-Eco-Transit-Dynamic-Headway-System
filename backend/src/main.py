@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 import logging
 
-from backend.src.trains import router as trains_router
+# Import routers
+from src.trains import router as trains_router
 
 # Initialize logger
 logging.basicConfig(level=logging.INFO)

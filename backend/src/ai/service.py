@@ -2,21 +2,20 @@ import os
 import logging
 from typing import TypedDict, Annotated, Sequence
 import operator
-
+from langchain_openrouter import ChatOpenRouter
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph import StateGraph, END
 
-from backend.src.ai.prompts import text_to_sql_prompt, crisis_broadcast_prompt
+from src.ai.prompts import text_to_sql_prompt, crisis_broadcast_prompt
 
 logger = logging.getLogger(__name__)
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENROUTER_API_KEY", "dummy_key")
 
-llm = ChatOpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    model="openai/gpt-4o-mini",
-    temperature=0
+llm = ChatOpenRouter(
+    model="openai/gpt-oss-120b:free",
+    temperature=0,
 )
 
 # ---------------------------------------------------------

@@ -3,8 +3,8 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from backend.src.database import get_db
-from backend.src.trains.models import Train
+from src.database import get_db
+from src.trains.models import Train
 
 async def valid_train_id(
     train_id: str,

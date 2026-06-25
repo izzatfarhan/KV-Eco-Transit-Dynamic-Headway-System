@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, Index
 from sqlalchemy.orm import relationship
 
-from backend.src.models import Base
+from src.models import Base
 
 class TelemetryLog(Base):
     """

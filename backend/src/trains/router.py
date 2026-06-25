@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from backend.src.database import get_db
-from backend.src.trains import models, schemas, dependencies
+from src.database import get_db
+from src.trains import models, schemas, dependencies
 
 router = APIRouter()
 
