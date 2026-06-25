@@ -1,3 +1,5 @@
+# DB models
+
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Numeric, DateTime
 from sqlalchemy.orm import relationship
