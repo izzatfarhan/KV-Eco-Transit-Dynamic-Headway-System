@@ -34,7 +34,45 @@ async def fetch_live_telemetry(api_key: Optional[str] = None):
             feed = gtfs_realtime_pb2.FeedMessage()
             feed.ParseFromString(response.content)
             
-            # Processing would happen here (saving to DB via AsyncSession)
+            # Process entities and save to DB
+            from src.database import SessionFactory
+            from src.trains.models import Train
+            from sqlalchemy.future import select
+            from datetime import datetime
+            
+            async with SessionFactory() as db:
+                for entity in feed.entity:
+                    if entity.HasField('vehicle'):
+                        vehicle = entity.vehicle
+                        v_id = vehicle.vehicle.id
+                        if not v_id: 
+                            continue
+                        
+                        # Map GTFS Realtime CurrentStatus enum
+                        status_map = {
+                            0: "Incoming",
+                            1: "Stopped",
+                            2: "Moving"
+                        }
+                        v_status = status_map.get(vehicle.current_status, "Moving")
+                        v_speed = vehicle.position.speed if vehicle.position.HasField('speed') else 0.0
+                        
+                        result = await db.execute(select(Train).where(Train.train_id == v_id))
+                        train = result.scalars().first()
+                        
+                        if train:
+                            train.status = v_status
+                            train.current_speed = v_speed
+                            train.last_ping_time = datetime.utcnow()
+                        else:
+                            new_train = Train(
+                                train_id=v_id,
+                                status=v_status,
+                                current_speed=v_speed,
+                                last_ping_time=datetime.utcnow()
+                            )
+                            db.add(new_train)
+                await db.commit()
             
             logger.info(f"Successfully processed {len(feed.entity)} telemetry entities.")
             

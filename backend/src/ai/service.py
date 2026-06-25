@@ -1,4 +1,5 @@
 import os
+import getpass
 import logging
 from typing import TypedDict, Annotated, Sequence
 import operator
@@ -11,7 +12,8 @@ from src.ai.prompts import text_to_sql_prompt, crisis_broadcast_prompt
 
 logger = logging.getLogger(__name__)
 
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENROUTER_API_KEY", "dummy_key")
+if not os.getenv("OPENROUTER_API_KEY"):
+    os.environ["OPENROUTER_API_KEY"] = getpass.getpass("Enter your OpenRouter API key: ")
 
 llm = ChatOpenRouter(
     model="openai/gpt-oss-120b:free",

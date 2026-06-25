@@ -2,6 +2,11 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 import logging
 
+# Import models to ensure SQLAlchemy registry is populated before relationships are resolved
+import src.stations.models
+import src.telemetry.models
+import src.trains.models
+
 # Import routers
 from src.trains import router as trains_router
 
@@ -9,10 +14,24 @@ from src.trains import router as trains_router
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+import asyncio
+from contextlib import asynccontextmanager
+from src.telemetry.service import ingestion_loop
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Start the background telemetry ingestion loop
+    # In production, pass the actual API key or configure it in service.py
+    task = asyncio.create_task(ingestion_loop())
+    yield
+    # Shutdown: Cancel the background task
+    task.cancel()
+
 app = FastAPI(
     title="Klang Valley Eco-Transit Optimizer",
     description="Dynamic Headway System API for Malaysian transit network",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Centralized Error Handling
